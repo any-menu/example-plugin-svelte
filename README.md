@@ -123,7 +123,21 @@ npm install -D svelte-loader
   });
   ```
 
-(5) (可选) Svelte5 与 Svelte3/4 的一些差异
+(5) (可选, 推荐) 避免 ts 不认识 `.svelte`
+
+当编译和运行一切都正常时，你的 IDE 代码编辑器可能也会有飘红，
+不认识 `.svelte`，提示: `找不到模块“./SubPanel.svelte”或其相应的类型声明。ts(2307)`
+
+添加 `types/svelte.d.ts` 文件即可:
+
+```ts
+declare module "*.svelte" {
+  const component: any;
+  export default component;
+}
+```
+
+(6) (可选) Svelte5 与 Svelte3/4 的一些差异
 
 该项目使用的是 Svelte5，版本 5 和 3/4 的一些用法有些不同
 
