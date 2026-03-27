@@ -15,6 +15,7 @@ import cssText from './style.css?inline';
 
 import type { PluginInterface, PluginInterfaceCtx } from '../types/any-menu';
 
+import { mount } from 'svelte'
 import SubPanel from './SubPanel.svelte';
 
 let cache_ctx: PluginInterfaceCtx | undefined
@@ -49,11 +50,11 @@ export default class ExamplePluginSvelte implements PluginInterface {
           el: (targetEl: HTMLElement) => {
             // 使用 Svelte 渲染
             // 注意这里要求 target 已经插入到 DOM 中了 (不同于 Vue, Vue 的挂载并不作此要求)
-            new SubPanel({
+            mount(SubPanel, {
               target: targetEl,
               props: {
-                // name: 'Svelte',
-                // count: 3,
+                name: 'Svelte',
+                count: 3,
               }
             })
           }

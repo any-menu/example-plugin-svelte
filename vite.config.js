@@ -16,7 +16,7 @@ export default defineConfig({
     },
     cssCodeSplit: false, // 不单独输出 .css 文件，这里采用的 ?inline 字符串嵌入方案
     outDir: 'dist',
-    minify: false,
+    // minify: false, // (可选)
   },
   plugins: [svelte()],
 });

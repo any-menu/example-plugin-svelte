@@ -89,6 +89,24 @@ npm install -D svelte-loader
 
 假设面板入口文件为 index.ts：
 
+Svelte 5 写法:
+
+```ts
+import { mount } from 'svelte';
+import SubPanel from './SubPanel.svelte';
+
+const newPanel = document.createElement('div');
+ctx.api.registerSubPanel({
+  id: 'example-plugin-svelte-panel',
+  el: newPanel
+});
+
+// 使用 Svelte 渲染
+mount(SubPanel, { target: targetEl, props: {} });
+```
+
+Svelte 3/4 写法:
+
 ```ts
 import SubPanel from './SubPanel.svelte';
 
@@ -102,5 +120,36 @@ ctx.api.registerSubPanel({
 const app = new App({
   target: newPanel,
   props: {} // 你的 props
+});
+```
+
+(5) (可选) Svelte5 与 Svelte3/4 的一些差异
+
+该项目使用的是 Svelte5，版本 5 和 3/4 的一些用法有些不同
+
+- Svelte 3/4
+  ```js
+  new SubPanel({ target, props });
+  ```
+- Svelte 5
+  详见 [官方文档-mount](https://svelte.dev/docs/svelte/v5-migration-guide#Other-breaking-changes-mount-plays-transitions-by-default)
+  ```js
+  import { mount } from 'svelte';
+  mount(SubPanel, { target: targetEl, props: {} });
+  ```
+
+如果想要在版本 5 支持旧写法，则可以在 vite.config.js:
+
+```js
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+  plugins: [
+    svelte({
+      compilerOptions: {
+        mode: 'classic' // ⭐️ 启用 classic/class 兼容模式
+      }
+    })
+  ]
 });
 ```
