@@ -1,7 +1,7 @@
 /**
- * AnyMenu Plugin: Hello World
+ * AnyMenu Plugin
  *
- * Template for AnyMenu plugin development.
+ * Template for AnyMenu plugin development based on Svelte.
  * Implements PluginInterface with TypeScript class syntax.
  */
 
@@ -17,25 +17,25 @@ import type { PluginInterface, PluginInterfaceCtx } from '../types/any-menu';
 
 let cache_ctx: PluginInterfaceCtx | undefined
 
-export default class ExamplePluginSimple implements PluginInterface {
+export default class ExamplePluginSvelte implements PluginInterface {
   metadata = {
-    id: 'example-plugin-simple',
-    name: 'Example Plugin Simple',
+    id: 'example-plugin-svelte',
+    name: 'Example Plugin Svelte',
     version: '1.0.0',
     min_app_version: '1.1.0',
     author: 'your-name',
-    description: 'A minimal AnyMenu plugin template that prints Hello World.',
+    description: 'A minimal AnyMenu plugin template based on Svelte.',
     icon: 'lucide-printer',
     css: cssText,
   };
 
   onLoad(): void {
-    console.log('[ExamplePluginSimple] Plugin loaded');
+    console.log('[ExamplePluginSvelte] Plugin loaded');
   }
 
   onUnload(): void {
-    if (cache_ctx) cache_ctx.api.unregisterSubPanel('example-plugin-simple-panel')
-    console.log('[ExamplePluginSimple] Plugin unloaded');
+    if (cache_ctx) cache_ctx.api.unregisterSubPanel('example-plugin-svelte-panel')
+    console.log('[ExamplePluginSvelte] Plugin unloaded');
   }
 
   async run(ctx: PluginInterfaceCtx): Promise<void> {
@@ -44,7 +44,7 @@ export default class ExamplePluginSimple implements PluginInterface {
       cache_ctx = ctx
       const newPanel = document.createElement('div'); newPanel.innerText = 'New Panel Content';
       ctx.api.registerSubPanel({
-          id: 'example-plugin-simple-panel',
+          id: 'example-plugin-svelte-panel',
           el: newPanel
       })
     }
@@ -53,16 +53,16 @@ export default class ExamplePluginSimple implements PluginInterface {
     const selected = ctx.env.selectedText;
     if (selected && selected.trim() !== '') {
       // 如果有选中文本，在其后追加问候
-      ctx.api.sendText(`${selected} — ExamplePluginSimply!`);
+      ctx.api.sendText(`${selected} — ExamplePluginSvelte!`);
     } else {
       // 否则直接输出
-      // ctx.api.sendText('ExamplePluginSimply!');
+      // ctx.api.sendText('ExamplePluginSvelte!');
 
       // 否则显示面板
       ctx.api.hidePanel(['menu'])
-      ctx.api.showPanel(['example-plugin-simple-panel'])
+      ctx.api.showPanel(['example-plugin-svelte-panel'])
     }
 
-    ctx.api.notify('ExamplePluginSimply plugin executed ✅');
+    ctx.api.notify('ExamplePluginSvelte plugin executed ✅');
   }
 }
