@@ -15,6 +15,8 @@ import cssText from './style.css?inline';
 
 import type { PluginInterface, PluginInterfaceCtx } from '../types/any-menu';
 
+import SubPanel from './SubPanel.svelte';
+
 let cache_ctx: PluginInterfaceCtx | undefined
 
 export default class ExamplePluginSvelte implements PluginInterface {
@@ -42,10 +44,19 @@ export default class ExamplePluginSvelte implements PluginInterface {
     // 注册面板示例
     if (!cache_ctx) {
       cache_ctx = ctx
-      const newPanel = document.createElement('div'); newPanel.innerText = 'New Panel Content';
       ctx.api.registerSubPanel({
           id: 'example-plugin-svelte-panel',
-          el: newPanel
+          el: (targetEl: HTMLElement) => {
+            // 使用 Svelte 渲染
+            // 注意这里要求 target 已经插入到 DOM 中了 (不同于 Vue, Vue 的挂载并不作此要求)
+            new SubPanel({
+              target: targetEl,
+              props: {
+                // name: 'Svelte',
+                // count: 3,
+              }
+            })
+          }
       })
     }
 
