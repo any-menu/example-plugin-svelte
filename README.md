@@ -37,105 +37,105 @@ npm install -D svelte-loader
 
 - 如果之前的项目基于 webpack：
 
-    ```bash
-    npm install -D webpack svelte-loader style-loader css-loader
-    ```
+  ```bash
+  npm install -D webpack svelte-loader style-loader css-loader
+  ```
 
-    webpack.config.js 配置示例：
+  webpack.config.js 配置示例：
 
-    ```js
-    // webpack.config.js
-    const path = require('path');
-    module.exports = {
-      resolve: {
-        alias: {
-          svelte: path.resolve('node_modules', 'svelte')
+  ```js
+  // webpack.config.js
+  const path = require('path');
+  module.exports = {
+    resolve: {
+      alias: {
+        svelte: path.resolve('node_modules', 'svelte')
+      },
+      extensions: ['.mjs', '.js', '.svelte'],
+      mainFields: ['svelte', 'browser', 'module', 'main']
+    },
+    module: {
+      rules: [
+        {
+          test: /\.svelte$/,
+          use: 'svelte-loader'
         },
-        extensions: ['.mjs', '.js', '.svelte'],
-        mainFields: ['svelte', 'browser', 'module', 'main']
-      },
-      module: {
-        rules: [
-          {
-            test: /\.svelte$/,
-            use: 'svelte-loader'
-          },
-          // 其他规则...
-        ]
-      },
-      // 其他配置...
-    }
-    ```
+        // 其他规则...
+      ]
+    },
+    // 其他配置...
+  }
+  ```
 
 - 如果之前的项目基于 vite：
 
-    ```bash
-    npm install -D vite @sveltejs/vite-plugin-svelte
-    ```
+  ```bash
+  npm install -D vite @sveltejs/vite-plugin-svelte
+  ```
 
-    vite.config.js 配置示例：
+  vite.config.js 配置示例：
 
-    ```js
-    // vite.config.js
-    import { defineConfig } from 'vite';
-    import { svelte } from '@sveltejs/vite-plugin-svelte';
+  ```js
+  // vite.config.js
+  import { defineConfig } from 'vite';
+  import { svelte } from '@sveltejs/vite-plugin-svelte';
 
-    export default defineConfig({
-      plugins: [svelte()]
-    });
-    ```
+  export default defineConfig({
+    plugins: [svelte()]
+  });
+  ```
 
 (4) 使用 Svelte 挂载到面板元素
 
 假设面板入口文件为 index.ts：
 
-Svelte 5 写法:
+- Svelte 5 写法:
 
-```ts
-import { mount } from 'svelte';
-import SubPanel from './SubPanel.svelte';
+  ```ts
+  import { mount } from 'svelte';
+  import SubPanel from './SubPanel.svelte';
+  
+  const newPanel = document.createElement('div');
+  ctx.api.registerSubPanel({
+    id: 'example-plugin-svelte-panel',
+    el: newPanel
+  });
+  
+  // 使用 Svelte 渲染
+  mount(SubPanel, { target: targetEl, props: {} });
+  ```
 
-const newPanel = document.createElement('div');
-ctx.api.registerSubPanel({
-  id: 'example-plugin-svelte-panel',
-  el: newPanel
-});
+- Svelte 3/4 写法:
 
-// 使用 Svelte 渲染
-mount(SubPanel, { target: targetEl, props: {} });
-```
-
-Svelte 3/4 写法:
-
-```ts
-import SubPanel from './SubPanel.svelte';
-
-const newPanel = document.createElement('div');
-ctx.api.registerSubPanel({
-  id: 'example-plugin-svelte-panel',
-  el: newPanel
-});
-
-// 使用 Svelte 渲染
-const app = new App({
-  target: newPanel,
-  props: {} // 你的 props
-});
-```
+  ```ts
+  import SubPanel from './SubPanel.svelte';
+  
+  const newPanel = document.createElement('div');
+  ctx.api.registerSubPanel({
+    id: 'example-plugin-svelte-panel',
+    el: newPanel
+  });
+  
+  // 使用 Svelte 渲染
+  const app = new App({
+    target: newPanel,
+    props: {} // 你的 props
+  });
+  ```
 
 (5) (可选) Svelte5 与 Svelte3/4 的一些差异
 
 该项目使用的是 Svelte5，版本 5 和 3/4 的一些用法有些不同
 
-- Svelte 3/4
-  ```js
-  new SubPanel({ target, props });
-  ```
 - Svelte 5
   详见 [官方文档-mount](https://svelte.dev/docs/svelte/v5-migration-guide#Other-breaking-changes-mount-plays-transitions-by-default)
   ```js
   import { mount } from 'svelte';
   mount(SubPanel, { target: targetEl, props: {} });
+  ```
+- Svelte 3/4
+  ```js
+  new SubPanel({ target, props });
   ```
 
 如果想要在版本 5 支持旧写法，则可以在 vite.config.js:
